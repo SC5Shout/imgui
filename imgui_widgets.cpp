@@ -6940,6 +6940,7 @@ static void DebugLogMultiSelectRequests(const char* function, const ImGuiMultiSe
     if (data->RequestSetRange)  IMGUI_DEBUG_LOG_SELECTION("[selection] %s: RequestSetRange %p..%p = %d (dir %+d)\n", function, data->RangeSrcItem, data->RangeDstItem, data->RangeSelected, data->RangeDirection);
 }
 
+// Return ImGuiMultiSelectIO structure. Lifetime: valid until corresponding call to EndMultiSelect().
 ImGuiMultiSelectIO* ImGui::BeginMultiSelect(ImGuiMultiSelectFlags flags, void* range_ref, bool range_ref_is_selected)
 {
     ImGuiContext& g = *GImGui;
@@ -6993,6 +6994,7 @@ ImGuiMultiSelectIO* ImGui::BeginMultiSelect(ImGuiMultiSelectFlags flags, void* r
     return &ms->BeginIO;
 }
 
+// Return updated ImGuiMultiSelectIO structure. Lifetime: until EndFrame() or next BeginMultiSelect() call.
 ImGuiMultiSelectIO* ImGui::EndMultiSelect()
 {
     ImGuiContext& g = *GImGui;
@@ -7014,6 +7016,7 @@ ImGuiMultiSelectIO* ImGui::EndMultiSelect()
     ms->FocusScopeId = 0;
     ms->Window = NULL;
     ms->Flags = ImGuiMultiSelectFlags_None;
+    ms->BeginIO.Clear(); // Invalidate contents of BeginMultiSelect() to enforce scope.
     PopFocusScope();
     g.CurrentMultiSelect = NULL;
 
