@@ -19,7 +19,7 @@ project "ImGui"
     }
 
     includedirs {       
-        "/.",
+        ".",
         "/misc/cpp",
         "/backends",
     }
